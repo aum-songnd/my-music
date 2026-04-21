@@ -30,7 +30,6 @@
 <!-- PLAYER BAR -->
 <div class="player-bar">
 
-  <!-- Hàng 1: left + center + right -->
   <div class="player-top">
 
     <div class="left">
@@ -49,26 +48,36 @@
           <span class="repeat-one">1</span>
         </button>
       </div>
-      <!-- Progress trong center — desktop -->
+
+      <!-- Desktop progress -->
       <div class="progress">
         <span id="currentTime">0:00</span>
-        <input type="range" id="progressBar" min="0" max="100" value="0">
+        <div class="progress-wrap">
+          <div class="progress-fill" id="progressFill"></div>
+          <input type="range" id="progressBar" min="0" max="100" value="0" step="0.1">
+        </div>
         <span id="duration">0:00</span>
       </div>
     </div>
 
     <div class="right">
       <i class="fa-solid fa-volume-high" id="volIcon"></i>
-      <input type="range" id="volume" min="0" max="1" step="0.01">
+      <div class="progress-wrap vol-wrap">
+        <div class="progress-fill" id="volFill"></div>
+        <input type="range" id="volume" min="0" max="1" step="0.01">
+      </div>
       <span id="volLabel">70%</span>
     </div>
 
   </div>
 
-  <!-- Hàng 2: progress riêng — chỉ mobile -->
+  <!-- Mobile progress -->
   <div class="progress-row">
     <span id="currentTime2">0:00</span>
-    <input type="range" id="progressBar2" min="0" max="100" value="0">
+    <div class="progress-wrap">
+      <div class="progress-fill" id="progressFill2"></div>
+      <input type="range" id="progressBar2" min="0" max="100" value="0" step="0.1">
+    </div>
     <span id="duration2">0:00</span>
   </div>
 

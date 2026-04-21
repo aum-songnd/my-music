@@ -1,9 +1,9 @@
 [ 
-{ "name": "chu_dai_bi", "file": "music/chu_dai_bi.mp3" } 
-, 
 { "name": "dao_buoc_hong_kong", "file": "music/dao_buoc_hong_kong.mp3" } 
 , 
-{ "name": "lofi", "file": "music/lofi.mp3" } 
-, 
 { "name": "nguoi_lang_im_nguoi_hay_noi", "file": "music/nguoi_lang_im_nguoi_hay_noi.mp3" } 
+, 
+{ "name": "Ordinary", "file": "music/Ordinary.mp3" } 
+, 
+{ "name": "PARTY 4 U", "file": "music/PARTY 4 U.mp3" } 
 ] 

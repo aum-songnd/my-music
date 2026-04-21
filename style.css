@@ -9,10 +9,6 @@
   --text: #f0f0f5;
   --muted: #7a7a90;
   --bar-h: 80px;
-
-  /* Progress fill: will be updated by JS */
-  --progress-pct: 0%;
-  --volume-pct: 70%;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -93,7 +89,6 @@ body {
 }
 .vinyl.playing { animation-play-state: running; }
 
-/* Tên bài dưới vinyl — chỉ hiện mobile */
 .vinyl-title {
   display: none;
   font-size: 14px;
@@ -138,9 +133,7 @@ body {
   gap: 8px;
 }
 
-.progress-row {
-  display: none;
-}
+.progress-row { display: none; }
 
 /* ===== LEFT ===== */
 .left {
@@ -241,16 +234,63 @@ body {
   display: flex; align-items: center; justify-content: center;
 }
 
-/* ===== RANGE BASE ===== */
-input[type="range"] {
-  -webkit-appearance: none;
-  appearance: none;
+/* ===== PROGRESS WRAP ===== */
+.progress-wrap {
+  position: relative;
   flex: 1;
   height: 4px;
   border-radius: 4px;
-  outline: none;
+  background: var(--surface2);
   cursor: pointer;
 }
+
+.progress-fill {
+  position: absolute;
+  top: 0; left: 0;
+  height: 100%;
+  width: 0%;
+  background: #ffffff;
+  border-radius: 4px;
+  pointer-events: none;
+  will-change: width;
+  transition: background 0.2s;
+}
+
+.progress-wrap:hover .progress-fill {
+  background: var(--accent);
+}
+
+/* Hide native range track, keep thumb + interaction */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  outline: none;
+  cursor: pointer;
+  margin: 0;
+  padding: 0;
+  /* Expand hit area vertically without affecting layout */
+  padding-top: 10px;
+  padding-bottom: 10px;
+  height: 24px;
+  top: 50%;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+  background: transparent;
+  height: 4px;
+}
+input[type="range"]::-moz-range-track {
+  background: transparent;
+  height: 4px;
+}
+
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   width: 12px; height: 12px;
@@ -258,39 +298,21 @@ input[type="range"]::-webkit-slider-thumb {
   background: var(--text);
   cursor: pointer;
   transition: transform 0.15s;
+  margin-top: -4px;
 }
 input[type="range"]:hover::-webkit-slider-thumb { transform: scale(1.3); }
-
-/* ===== COLORED PROGRESS TRACK ===== */
-#progressBar {
-  background: linear-gradient(
-    to right,
-    var(--accent) 0%,
-    var(--accent) var(--progress-pct),
-    var(--surface2) var(--progress-pct),
-    var(--surface2) 100%
-  );
+input[type="range"]::-moz-range-thumb {
+  width: 12px; height: 12px;
+  border: none;
+  border-radius: 50%;
+  background: var(--text);
+  cursor: pointer;
 }
 
-#progressBar2 {
-  background: linear-gradient(
-    to right,
-    var(--accent) 0%,
-    var(--accent) var(--progress-pct),
-    var(--surface2) var(--progress-pct),
-    var(--surface2) 100%
-  );
-}
-
-/* ===== COLORED VOLUME TRACK ===== */
-#volume {
-  background: linear-gradient(
-    to right,
-    #1db954 0%,
-    #1db954 var(--volume-pct),
-    var(--surface2) var(--volume-pct),
-    var(--surface2) 100%
-  );
+/* ===== VOLUME WRAP ===== */
+.vol-wrap {
+  width: 80px;
+  flex: none;
 }
 
 /* ===== RIGHT ===== */
@@ -302,9 +324,7 @@ input[type="range"]:hover::-webkit-slider-thumb { transform: scale(1.3); }
   gap: 8px;
 }
 .right i { font-size: 14px; color: var(--muted); flex-shrink: 0; }
-.right input[type="range"] { width: 80px; flex: none; }
 
-/* Volume label */
 #volLabel {
   font-size: 11px;
   color: var(--muted);
@@ -409,7 +429,7 @@ button { cursor: pointer; }
     min-width: 26px;
     text-align: center;
   }
-  .progress-row input[type="range"] { flex: 1; }
+  .progress-row .progress-wrap { flex: 1; }
 
   .controls { gap: 0; }
   .controls button { width: 32px; height: 32px; font-size: 13px; }
@@ -420,11 +440,9 @@ button { cursor: pointer; }
     flex-shrink: 0;
     gap: 5px;
   }
-  .right input[type="range"] { width: 52px; }
+  .vol-wrap { width: 52px; }
   .right i { font-size: 13px; }
-  #volLabel {
-   display: none;
-  }
+  #volLabel { display: none; }
 }
 
 @media (max-width: 380px) {

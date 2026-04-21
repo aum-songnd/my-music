@@ -12,21 +12,24 @@ const playlistContainer = document.getElementById("playlistContainer");
 
 // Desktop progress
 const progressBar = document.getElementById("progressBar");
+const progressFill = document.getElementById("progressFill");
 const currentTimeEl = document.getElementById("currentTime");
 const durationEl = document.getElementById("duration");
 
 // Mobile progress
 const progressBar2 = document.getElementById("progressBar2");
+const progressFill2 = document.getElementById("progressFill2");
 const currentTimeEl2 = document.getElementById("currentTime2");
 const durationEl2 = document.getElementById("duration2");
 
+// Volume
 const volume = document.getElementById("volume");
+const volFill = document.getElementById("volFill");
 const volLabel = document.getElementById("volLabel");
 const volIcon = document.getElementById("volIcon");
+
 const cover = document.getElementById("cover");
 const vinyl = document.getElementById("vinyl");
-
-const root = document.documentElement;
 
 // ===== STATE =====
 let playlist = [];
@@ -91,17 +94,19 @@ function loadSong(index, resetTime = true) {
   updateActiveSong();
 }
 
-// ===== CSS VAR HELPERS =====
+// ===== PROGRESS FILL (GPU-composited, no repaint) =====
 function setProgressPct(pct) {
-  root.style.setProperty("--progress-pct", pct.toFixed(2) + "%");
+  const pctStr = pct.toFixed(2) + "%";
+  progressFill.style.width = pctStr;
+  progressFill2.style.width = pctStr;
 }
 
+// ===== VOLUME UI =====
 function updateVolUI(val) {
   const pct = Math.round(val * 100);
-  root.style.setProperty("--volume-pct", pct + "%");
+  volFill.style.width = pct + "%";
   volLabel.textContent = pct + "%";
 
-  // Update icon based on level
   if (pct === 0) {
     volIcon.className = "fa-solid fa-volume-xmark";
   } else if (pct < 40) {
@@ -222,16 +227,21 @@ audio.onended = () => {
   }
 };
 
-// ===== PROGRESS =====
+// ===== PROGRESS UPDATE =====
 audio.ontimeupdate = () => {
   if (isNaN(audio.duration)) return;
   const pct = (audio.currentTime / audio.duration) * 100;
   const timeStr = formatTime(audio.currentTime);
 
+  // Update range inputs (for thumb position)
   progressBar.value = pct;
   progressBar2.value = pct;
+
+  // Update time labels
   currentTimeEl.textContent = timeStr;
   currentTimeEl2.textContent = timeStr;
+
+  // Update fill divs — width change = GPU composite, no repaint
   setProgressPct(pct);
 
   localStorage.setItem("time_" + currentIndex, audio.currentTime);
@@ -244,6 +254,7 @@ progressBar.oninput = () => {
   setProgressPct(pct);
   progressBar2.value = pct;
 };
+
 progressBar2.oninput = () => {
   const pct = Number(progressBar2.value);
   audio.currentTime = (pct / 100) * audio.duration;
