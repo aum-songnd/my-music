@@ -448,3 +448,95 @@ button { cursor: pointer; }
 @media (max-width: 380px) {
   .vinyl { width: 120px; height: 120px; }
 }
+
+/* ===== TAB BAR (mobile only) ===== */
+.tab-bar {
+  display: none;
+}
+
+.mobile-playlist {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  :root { --tab-bar-h: 52px; }
+
+  .tab-bar {
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: var(--tab-bar-h);
+    background: var(--surface);
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    z-index: 200;
+  }
+
+  .tab-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 10px;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+  .tab-btn i { font-size: 16px; }
+  .tab-btn.active { color: var(--accent); }
+
+  /* Push app content below tab bar */
+  .app {
+    margin-top: var(--tab-bar-h);
+    height: calc(100dvh - var(--tab-bar-h) - var(--bar-h));
+  }
+
+  /* Hide desktop sidebar on mobile */
+  .sidebar { display: none; }
+
+  /* Now playing panel */
+  #tabNowPlaying {
+    display: flex;
+    width: 100%;
+    height: 100%;
+  }
+  #tabNowPlaying.hidden { display: none; }
+
+  /* Playlist panel */
+  .mobile-playlist {
+    display: none;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    padding: 16px 12px;
+    flex-direction: column;
+    gap: 4px;
+    background: var(--bg);
+  }
+  .mobile-playlist.active {
+    display: flex;
+  }
+
+  .mobile-playlist .song-item.playing {
+    background: rgba(29,185,84,0.15);
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  .mobile-playlist .song-item {
+    flex-shrink: unset;
+    padding: 12px 14px;
+    font-size: 13px;
+    border-radius: 10px;
+    background: var(--surface);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}

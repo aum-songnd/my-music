@@ -11,20 +11,37 @@
 
 <div class="app">
 
-  <!-- SIDEBAR -->
+  <!-- SIDEBAR (desktop) -->
   <div class="sidebar">
     <h2>🎧 River Music</h2>
     <div id="playlistContainer"></div>
   </div>
 
-  <!-- MAIN -->
-  <div class="main">
+  <!-- MAIN / NOW PLAYING -->
+  <div class="main" id="tabNowPlaying">
     <div class="vinyl-container">
       <div id="vinyl" class="vinyl"></div>
       <div class="vinyl-title" id="vinylTitle">Chưa phát</div>
     </div>
   </div>
 
+  <!-- MOBILE PLAYLIST PANEL -->
+  <div class="mobile-playlist" id="tabPlaylist">
+    <div id="mobilePlaylistContainer"></div>
+  </div>
+
+</div>
+
+<!-- MOBILE TAB BAR -->
+<div class="tab-bar">
+  <button class="tab-btn active" id="tabBtnNowPlaying" onclick="switchTab('nowplaying')">
+    <i class="fa-solid fa-headphones"></i>
+    <span>River Music</span>
+  </button>
+  <button class="tab-btn" id="tabBtnPlaylist" onclick="switchTab('playlist')">
+    <i class="fa-solid fa-list"></i>
+    <span>Playlist</span>
+  </button>
 </div>
 
 <!-- PLAYER BAR -->
@@ -40,9 +57,9 @@
     <div class="center">
       <div class="controls">
         <button id="shuffleBtn"><i class="fa-solid fa-shuffle"></i></button>
-        <button id="prevBtn">⏮</button>
-        <button id="playBtn">▶</button>
-        <button id="nextBtn">⏭</button>
+          <button id="prevBtn"><i class="fa-solid fa-backward-fast"></i></button>
+        <button id="playBtn"><i class="fa-solid fa-play"></i></button>
+        <button id="nextBtn"><i class="fa-solid fa-forward-fast"></i></button>
         <button id="repeatBtn">
           <i class="fa-solid fa-repeat"></i>
           <span class="repeat-one">1</span>

@@ -150,20 +150,40 @@ function prevSong() {
 
 // ===== PLAYLIST UI =====
 function renderPlaylist() {
+  const mobileContainer = document.getElementById("mobilePlaylistContainer");
   playlistContainer.innerHTML = "";
+  if (mobileContainer) mobileContainer.innerHTML = "";
   playlist.forEach((song, index) => {
-    const div = document.createElement("div");
-    div.className = `song-item ${index === currentIndex ? "playing" : ""}`;
-    div.innerHTML = `🎵 ${song.name}`;
-    div.onclick = () => { loadSong(index, true); audio.play(); };
-    playlistContainer.appendChild(div);
+    const makeItem = (isMobile) => {
+      const div = document.createElement("div");
+      div.className = `song-item ${index === currentIndex ? "playing" : ""}`;
+      div.innerHTML = `🎵 ${song.name}`;
+      div.onclick = () => {
+        loadSong(index, true);
+        audio.play();
+        if (isMobile) switchTab("nowplaying");
+      };
+      return div;
+    };
+    playlistContainer.appendChild(makeItem(false));
+    if (mobileContainer) mobileContainer.appendChild(makeItem(true));
   });
 }
 
 function updateActiveSong() {
-  document.querySelectorAll(".song-item").forEach((el, i) => {
+  // Update desktop sidebar
+  playlistContainer.querySelectorAll(".song-item").forEach((el, i) => {
     el.classList.toggle("playing", i === currentIndex);
   });
+  // Update mobile playlist
+  const mobileContainer = document.getElementById("mobilePlaylistContainer");
+  if (mobileContainer) {
+    mobileContainer.querySelectorAll(".song-item").forEach((el, i) => {
+      el.classList.toggle("playing", i === currentIndex);
+    });
+    const activeEl = mobileContainer.querySelector(".playing");
+    if (activeEl) activeEl.scrollIntoView({ block: "nearest", behavior: "smooth" });
+  }
 }
 
 // ===== FORMAT TIME =====
@@ -269,3 +289,23 @@ volume.oninput = (e) => {
   localStorage.setItem("volume", val);
   updateVolUI(val);
 };
+
+// ===== MOBILE TABS =====
+function switchTab(tab) {
+  const nowPlaying = document.getElementById("tabNowPlaying");
+  const playlist = document.getElementById("tabPlaylist");
+  const btnNow = document.getElementById("tabBtnNowPlaying");
+  const btnPl = document.getElementById("tabBtnPlaylist");
+
+  if (tab === "nowplaying") {
+    nowPlaying.classList.remove("hidden");
+    playlist.classList.remove("active");
+    btnNow.classList.add("active");
+    btnPl.classList.remove("active");
+  } else {
+    nowPlaying.classList.add("hidden");
+    playlist.classList.add("active");
+    btnNow.classList.remove("active");
+    btnPl.classList.add("active");
+  }
+}
