@@ -1,275 +1,57 @@
 <!doctype html>
 <html lang="vi">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Đĩa Nhạc Quay</title>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>River Music</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
 
-    <style>
-      body {
-        margin: 0;
-        height: 100vh;
-        background: linear-gradient(#1a1a1a, #000);
-        font-family: Arial, sans-serif;
-        color: #ddd;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        overflow: hidden;
-      }
+<body>
+<div class="app">
 
-      .player {
-        text-align: center;
-        width: 420px;
-      }
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <h2>🎧 River</h2>
+    <ul>
+      <li class="active">🏠 Trang chủ</li>
+      <li>🔍 Tìm kiếm</li>
+      <li>❤️ Yêu thích</li>
+    </ul>
+  </div>
 
-      .vinyl {
-        width: 340px;
-        height: 340px;
-        background: radial-gradient(
-          circle at 50% 50%,
-          #111 0%,
-          #222 40%,
-          #111 70%,
-          #000 100%
-        );
-        border-radius: 50%;
-        box-shadow:
-          0 0 50px rgba(0, 0, 0, 0.95),
-          inset 0 0 80px rgba(255, 255, 255, 0.08),
-          0 20px 40px rgba(0, 0, 0, 0.9);
-        position: relative;
-        margin: 0 auto 30px;
-        animation: spin 28s linear infinite;
-        animation-play-state: paused;
-      }
+  <!-- MAIN -->
+  <div class="main">
+    <h1>Playlist của bạn</h1>
+    <div id="playlistContainer" class="playlist-grid"></div>
+  </div>
 
-      .vinyl::before {
-        content: "";
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 82%;
-        height: 82%;
-        border-radius: 50%;
-        transform: translate(-50%, -50%);
-        background: repeating-radial-gradient(
-          circle,
-          transparent 0px,
-          rgba(255, 255, 255, 0.07) 3px,
-          transparent 6px
-        );
-      }
+  <!-- PLAYER -->
+  <div class="player-bar">
+    <div class="left">
+      <span id="songTitle">Chưa phát</span>
+    </div>
 
-      .label {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 120px;
-        height: 120px;
-        background: radial-gradient(circle, #e91e63 0%, #c2185b 100%);
-        border-radius: 50%;
-        transform: translate(-50%, -50%);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 52px;
-        color: white;
-      }
+    <div class="center">
+      <button id="prevBtn">⏮</button>
+      <button id="playBtn">▶</button>
+      <button id="nextBtn">⏭</button>
 
-      @keyframes spin {
-        from {
-          transform: rotate(0deg);
-        }
-        to {
-          transform: rotate(360deg);
-        }
-      }
-
-      h1 {
-        margin: 0 0 10px 0;
-        font-size: 32px;
-        padding-bottom: 20%;
-      }
-
-      .song-info {
-        font-size: 18px;
-        margin: 15px 0 25px;
-        min-height: 28px;
-        color: #bbb;
-      }
-
-      .controls {
-        display: flex;
-        justify-content: center;
-        margin-bottom: 25px;
-      }
-
-      button {
-        padding: 12px 28px;
-        font-size: 17px;
-        border: none;
-        border-radius: 50px;
-        cursor: pointer;
-        transition: 0.3s;
-      }
-
-      #playBtn {
-        background: #ff2d55;
-        color: white;
-      }
-
-      #playBtn:hover {
-        transform: scale(1.05);
-      }
-
-      .playlist {
-        background: rgba(255, 255, 255, 0.05);
-        border-radius: 15px;
-        max-height: 320px;
-        overflow-y: auto;
-        padding: 10px;
-        text-align: left;
-        margin-top: 20px;
-      }
-
-      .playlist h2 {
-        margin: 0 0 12px 0;
-        font-size: 18px;
-        color: #ff2d55;
-        text-align: center;
-      }
-
-      .song-item {
-        padding: 12px 15px;
-        margin: 4px 0;
-        border-radius: 8px;
-        cursor: pointer;
-        display: flex;
-        gap: 10px;
-      }
-
-      .song-item:hover {
-        background: rgba(255, 45, 85, 0.2);
-      }
-
-      .song-item.playing {
-        background: rgba(255, 45, 85, 0.3);
-        font-weight: bold;
-      }
-    </style>
-  </head>
-
-  <body>
-    <div class="player">
-      <h1>River music : )))</h1>
-
-      <div class="vinyl" id="vinyl">
-        <div class="label">♫</div>
-      </div>
-
-      <div class="song-info" id="songTitle">Đang tải...</div>
-
-      <div class="controls">
-        <button id="playBtn">▶ Phát</button>
-      </div>
-
-      <div class="playlist">
-        <h2>Bộ sưu tập nhạc</h2>
-        <div id="playlistContainer"></div>
+      <div class="progress">
+        <span id="currentTime">0:00</span>
+        <input type="range" id="progressBar">
+        <span id="duration">0:00</span>
       </div>
     </div>
 
-    <audio id="audio"></audio>
+    <div class="right">
+      🔊 <input type="range" id="volume" min="0" max="1" step="0.01">
+    </div>
+  </div>
 
-    <script>
-      const vinyl = document.getElementById("vinyl");
-      const audio = document.getElementById("audio");
-      const playBtn = document.getElementById("playBtn");
-      const songTitle = document.getElementById("songTitle");
-      const playlistContainer = document.getElementById("playlistContainer");
+</div>
 
-      let playlist = [];
-      let currentIndex = 0;
-      let isPlaying = false;
-
-      // Load playlist từ JSON
-      async function loadMusicList() {
-        try {
-          const res = await fetch("music/playlist.json");
-          playlist = await res.json();
-
-          currentIndex = 0;
-          loadSong(currentIndex);
-          renderPlaylist();
-        } catch (err) {
-          console.error(err);
-          songTitle.textContent = "Không load được playlist.json";
-        }
-      }
-
-      function renderPlaylist() {
-        playlistContainer.innerHTML = "";
-
-        playlist.forEach((song, index) => {
-          const div = document.createElement("div");
-          div.className = `song-item ${index === currentIndex ? "playing" : ""}`;
-
-          div.innerHTML = `🎵 <span>${song.name}</span>`;
-
-          div.onclick = () => {
-            currentIndex = index;
-            loadSong(currentIndex);
-
-            if (!isPlaying) playMusic();
-            else audio.play();
-
-            renderPlaylist();
-          };
-
-          playlistContainer.appendChild(div);
-        });
-      }
-
-      function loadSong(index) {
-        if (!playlist.length) return;
-
-        audio.src = playlist[index].file;
-        songTitle.textContent = playlist[index].name;
-
-        renderPlaylist();
-      }
-
-      function playMusic() {
-        if (!playlist.length) return;
-
-        if (isPlaying) {
-          audio.pause();
-          vinyl.style.animationPlayState = "paused";
-          playBtn.textContent = "▶ Phát";
-        } else {
-          audio.play().catch(() => {
-            alert("Không phát được nhạc");
-          });
-
-          vinyl.style.animationPlayState = "running";
-          playBtn.textContent = "⏸ Tạm dừng";
-        }
-
-        isPlaying = !isPlaying;
-      }
-
-      playBtn.addEventListener("click", playMusic);
-
-      audio.addEventListener("ended", () => {
-        currentIndex = (currentIndex + 1) % playlist.length;
-        loadSong(currentIndex);
-        audio.play();
-      });
-
-      window.onload = () => {
-        loadMusicList();
-      };
-    </script>
-  </body>
+<audio id="audio"></audio>
+<script src="app.js"></script>
+</body>
 </html>
