@@ -1,9 +1,15 @@
 [ 
 { "name": "dao_buoc_hong_kong", "file": "music/dao_buoc_hong_kong.mp3" } 
 , 
+{ "name": "Die For You", "file": "music/Die For You.mp3" } 
+, 
 { "name": "nguoi_lang_im_nguoi_hay_noi", "file": "music/nguoi_lang_im_nguoi_hay_noi.mp3" } 
 , 
 { "name": "Ordinary", "file": "music/Ordinary.mp3" } 
 , 
 { "name": "PARTY 4 U", "file": "music/PARTY 4 U.mp3" } 
+, 
+{ "name": "supernatural", "file": "music/supernatural.mp3" } 
+, 
+{ "name": "thank u, next", "file": "music/thank u, next.mp3" } 
 ] 
