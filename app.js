@@ -7,11 +7,18 @@ const repeatBtn = document.getElementById("repeatBtn");
 const shuffleBtn = document.getElementById("shuffleBtn");
 
 const songTitle = document.getElementById("songTitle");
+const vinylTitle = document.getElementById("vinylTitle");
 const playlistContainer = document.getElementById("playlistContainer");
 
+// Desktop progress
 const progressBar = document.getElementById("progressBar");
 const currentTimeEl = document.getElementById("currentTime");
 const durationEl = document.getElementById("duration");
+
+// Mobile progress
+const progressBar2 = document.getElementById("progressBar2");
+const currentTimeEl2 = document.getElementById("currentTime2");
+const durationEl2 = document.getElementById("duration2");
 
 const volume = document.getElementById("volume");
 const cover = document.getElementById("cover");
@@ -22,9 +29,8 @@ let playlist = [];
 let currentIndex = 0;
 let isPlaying = false;
 
-let repeatMode = Number(localStorage.getItem("repeatMode")) || 0; // 0 off | 1 all | 2 one
+let repeatMode = Number(localStorage.getItem("repeatMode")) || 0;
 let isShuffle = localStorage.getItem("shuffle") === "true";
-
 let playedHistory = [];
 
 // ===== INIT =====
@@ -45,7 +51,6 @@ window.onload = () => {
 async function loadMusicList() {
   const res = await fetch("music/playlist.json");
   playlist = await res.json();
-
   loadSong(currentIndex);
   renderPlaylist();
 }
@@ -59,6 +64,7 @@ function loadSong(index, resetTime = true) {
 
   audio.src = song.file;
   songTitle.textContent = song.name;
+  vinylTitle.textContent = song.name;
   cover.src = imgSrc;
   vinyl.style.backgroundImage = `url('${imgSrc}')`;
 
@@ -66,13 +72,14 @@ function loadSong(index, resetTime = true) {
   localStorage.setItem("currentIndex", index);
 
   progressBar.value = 0;
+  progressBar2.value = 0;
   currentTimeEl.textContent = "0:00";
+  currentTimeEl2.textContent = "0:00";
 
   audio.onloadedmetadata = () => {
     durationEl.textContent = formatTime(audio.duration);
-    if (resetTime) {
-      audio.currentTime = 0;
-    }
+    durationEl2.textContent = formatTime(audio.duration);
+    if (resetTime) audio.currentTime = 0;
   };
 
   updateActiveSong();
@@ -87,21 +94,14 @@ function togglePlay() {
 function nextSong() {
   if (isShuffle) {
     playedHistory.push(currentIndex);
-
     let newIndex;
-    do {
-      newIndex = Math.floor(Math.random() * playlist.length);
-    } while (playedHistory.includes(newIndex));
-
-    if (playedHistory.length >= playlist.length) {
-      playedHistory = [];
-    }
-
+    do { newIndex = Math.floor(Math.random() * playlist.length); }
+    while (playedHistory.includes(newIndex));
+    if (playedHistory.length >= playlist.length) playedHistory = [];
     currentIndex = newIndex;
   } else {
     currentIndex = (currentIndex + 1) % playlist.length;
   }
-
   loadSong(currentIndex, true);
   audio.play();
 }
@@ -113,7 +113,6 @@ function prevSong() {
   } else {
     currentIndex = (currentIndex - 1 + playlist.length) % playlist.length;
   }
-
   loadSong(currentIndex, true);
   audio.play();
 }
@@ -121,17 +120,11 @@ function prevSong() {
 // ===== PLAYLIST UI =====
 function renderPlaylist() {
   playlistContainer.innerHTML = "";
-
   playlist.forEach((song, index) => {
     const div = document.createElement("div");
     div.className = `song-item ${index === currentIndex ? "playing" : ""}`;
     div.innerHTML = `🎵 ${song.name}`;
-
-    div.onclick = () => {
-      loadSong(index, true);
-      audio.play();
-    };
-
+    div.onclick = () => { loadSong(index, true); audio.play(); };
     playlistContainer.appendChild(div);
   });
 }
@@ -163,30 +156,15 @@ repeatBtn.onclick = () => {
 };
 
 const repeatOneEl = document.querySelector(".repeat-one");
-
 function updateRepeatUI() {
-  if (repeatMode === 0) {
-    repeatBtn.style.color = "white";
-    repeatOneEl.style.display = "none";
-  } else if (repeatMode === 1) {
-    repeatBtn.style.color = "#1db954";
-    repeatOneEl.style.display = "none";
-  } else {
-    repeatBtn.style.color = "#1db954";
-    repeatOneEl.style.display = "block";
-  }
+  if (repeatMode === 0) { repeatBtn.style.color = "white"; repeatOneEl.style.display = "none"; }
+  else if (repeatMode === 1) { repeatBtn.style.color = "#1db954"; repeatOneEl.style.display = "none"; }
+  else { repeatBtn.style.color = "#1db954"; repeatOneEl.style.display = "block"; }
 }
 
 // ===== SHUFFLE =====
-shuffleBtn.onclick = () => {
-  isShuffle = !isShuffle;
-  localStorage.setItem("shuffle", isShuffle);
-  updateShuffleUI();
-};
-
-function updateShuffleUI() {
-  shuffleBtn.style.color = isShuffle ? "#1db954" : "white";
-}
+shuffleBtn.onclick = () => { isShuffle = !isShuffle; localStorage.setItem("shuffle", isShuffle); updateShuffleUI(); };
+function updateShuffleUI() { shuffleBtn.style.color = isShuffle ? "#1db954" : "white"; }
 
 // ===== AUDIO EVENTS =====
 audio.onplay = () => {
@@ -203,14 +181,10 @@ audio.onpause = () => {
   cover.classList.remove("playing");
 };
 
-// ===== REPEAT LOGIC =====
 audio.onended = () => {
-  if (repeatMode === 2) {
-    audio.currentTime = 0;
-    audio.play();
-  } else if (repeatMode === 1) {
-    nextSong();
-  } else {
+  if (repeatMode === 2) { audio.currentTime = 0; audio.play(); }
+  else if (repeatMode === 1) { nextSong(); }
+  else {
     isPlaying = false;
     playBtn.textContent = "▶";
     vinyl.classList.remove("playing");
@@ -221,21 +195,20 @@ audio.onended = () => {
 // ===== PROGRESS =====
 audio.ontimeupdate = () => {
   if (isNaN(audio.duration)) return;
+  const pct = (audio.currentTime / audio.duration) * 100;
+  const timeStr = formatTime(audio.currentTime);
 
-  progressBar.value = (audio.currentTime / audio.duration) * 100;
-  currentTimeEl.textContent = formatTime(audio.currentTime);
+  progressBar.value = pct;
+  progressBar2.value = pct;
+  currentTimeEl.textContent = timeStr;
+  currentTimeEl2.textContent = timeStr;
 
-  const timeKey = "time_" + currentIndex;
-  localStorage.setItem(timeKey, audio.currentTime);
+  localStorage.setItem("time_" + currentIndex, audio.currentTime);
 };
 
-// ===== SEEK =====
-progressBar.oninput = () => {
-  audio.currentTime = (progressBar.value / 100) * audio.duration;
-};
+// ===== SEEK (cả 2 bar) =====
+progressBar.oninput = () => { audio.currentTime = (progressBar.value / 100) * audio.duration; };
+progressBar2.oninput = () => { audio.currentTime = (progressBar2.value / 100) * audio.duration; };
 
 // ===== VOLUME =====
-volume.oninput = (e) => {
-  audio.volume = e.target.value;
-  localStorage.setItem("volume", e.target.value);
-};
+volume.oninput = (e) => { audio.volume = e.target.value; localStorage.setItem("volume", e.target.value); };

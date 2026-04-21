@@ -4,11 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>River Music</title>
-
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
-
 <body>
 
 <div class="app">
@@ -21,56 +19,61 @@
 
   <!-- MAIN -->
   <div class="main">
-
     <div class="vinyl-container">
       <div id="vinyl" class="vinyl"></div>
+      <div class="vinyl-title" id="vinylTitle">Chưa phát</div>
     </div>
-
   </div>
 
 </div>
 
-<!-- PLAYER -->
+<!-- PLAYER BAR -->
 <div class="player-bar">
 
-  <!-- LEFT -->
-  <div class="left">
-    <img id="cover" class="cover">
-    <span id="songTitle">Chưa phát</span>
-  </div>
+  <!-- Hàng 1: left + center + right -->
+  <div class="player-top">
 
-  <!-- CENTER -->
-  <div class="center">
-
-    <div class="controls">
-      <button id="shuffleBtn"><i class="fa-solid fa-shuffle"></i></button>
-      <button id="prevBtn">⏮</button>
-      <button id="playBtn">▶</button>
-      <button id="nextBtn">⏭</button>
-      <button id="repeatBtn">
-        <i class="fa-solid fa-repeat"></i>
-        <span class="repeat-one">1</span>
-      </button>
+    <div class="left">
+      <img id="cover" class="cover" src="img/meme.webp" alt="cover">
+      <span id="songTitle">Chưa phát</span>
     </div>
 
-    <div class="progress">
-      <span id="currentTime">0:00</span>
-      <input type="range" id="progressBar" min="0" max="100" value="0">
-      <span id="duration">0:00</span>
+    <div class="center">
+      <div class="controls">
+        <button id="shuffleBtn"><i class="fa-solid fa-shuffle"></i></button>
+        <button id="prevBtn">⏮</button>
+        <button id="playBtn">▶</button>
+        <button id="nextBtn">⏭</button>
+        <button id="repeatBtn">
+          <i class="fa-solid fa-repeat"></i>
+          <span class="repeat-one">1</span>
+        </button>
+      </div>
+      <!-- Progress trong center — desktop -->
+      <div class="progress">
+        <span id="currentTime">0:00</span>
+        <input type="range" id="progressBar" min="0" max="100" value="0">
+        <span id="duration">0:00</span>
+      </div>
+    </div>
+
+    <div class="right">
+      <i class="fa-solid fa-volume-high"></i>
+      <input type="range" id="volume" min="0" max="1" step="0.01">
     </div>
 
   </div>
 
-  <!-- RIGHT -->
-  <div class="right">
-    <i class="fa-solid fa-volume-high"></i>
-    <input type="range" id="volume" min="0" max="1" step="0.01">
+  <!-- Hàng 2: progress riêng — chỉ mobile -->
+  <div class="progress-row">
+    <span id="currentTime2">0:00</span>
+    <input type="range" id="progressBar2" min="0" max="100" value="0">
+    <span id="duration2">0:00</span>
   </div>
 
 </div>
 
 <audio id="audio"></audio>
-
 <script src="app.js"></script>
 </body>
 </html>
