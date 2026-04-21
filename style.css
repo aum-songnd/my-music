@@ -209,7 +209,20 @@ body {
   transition: color 0.2s, background 0.2s, transform 0.15s;
 }
 .controls button:hover { color: var(--text); background: rgba(255,255,255,0.07); transform: scale(1.1); }
+#prevBtn,
+#nextBtn {
+  color: #fff !important;
+}
 
+#prevBtn i,
+#nextBtn i {
+  color: #fff !important;
+}
+
+#prevBtn:hover,
+#nextBtn:hover {
+  color: #fff !important;
+}
 #playBtn {
   width: 44px;
   height: 44px;

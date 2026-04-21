@@ -224,14 +224,14 @@ function updateShuffleUI() { shuffleBtn.style.color = isShuffle ? "#1db954" : "w
 // ===== AUDIO EVENTS =====
 audio.onplay = () => {
   isPlaying = true;
-  playBtn.textContent = "⏸";
+  playBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
   vinyl.classList.add("playing");
   cover.classList.add("playing");
 };
 
 audio.onpause = () => {
   isPlaying = false;
-  playBtn.textContent = "▶";
+  playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
   vinyl.classList.remove("playing");
   cover.classList.remove("playing");
 };
@@ -241,7 +241,7 @@ audio.onended = () => {
   else if (repeatMode === 1) { nextSong(); }
   else {
     isPlaying = false;
-    playBtn.textContent = "▶";
+    playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
     vinyl.classList.remove("playing");
     cover.classList.remove("playing");
   }
