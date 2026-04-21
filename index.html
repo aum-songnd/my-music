@@ -10,64 +10,67 @@
 </head>
 
 <body>
+
 <div class="app">
 
   <!-- SIDEBAR -->
   <div class="sidebar">
-    <h2>🎧 River</h2>
-    <ul>
-      <li class="active">🏠 Trang chủ</li>
-      <li>🔍 Tìm kiếm</li>
-      <li>❤️ Yêu thích</li>
-    </ul>
+    <h2>🎧 River Music</h2>
+    <div id="playlistContainer"></div>
   </div>
 
   <!-- MAIN -->
   <div class="main">
-    <h1>Playlist của bạn</h1>
 
-    <!-- VINYL -->
     <div class="vinyl-container">
       <div id="vinyl" class="vinyl"></div>
-    </div>
-
-    <div id="playlistContainer" class="playlist-grid"></div>
-  </div>
-
-  <!-- PLAYER -->
-  <div class="player-bar">
-
-    <div class="left">
-      <img id="cover" class="cover" />
-      <span id="songTitle">Chưa phát</span>
-    </div>
-
-    <div class="center">
-      <button id="shuffleBtn"><i class="fa-solid fa-shuffle"></i></button>
-      <button id="prevBtn">⏮</button>
-      <button id="playBtn">▶</button>
-      <button id="nextBtn">⏭</button>
-      <button id="repeatBtn">
-        <i class="fa-solid fa-repeat"></i>
-  <span class="repeat-one">1</span>
-</button>
-
-      <div class="progress">
-        <span id="currentTime">0:00</span>
-        <input type="range" id="progressBar" min="0" max="100" value="0">
-        <span id="duration">0:00</span>
-      </div>
-    </div>
-
-    <div class="right">
-      <i class="fa-solid fa-volume-high"></i> <input type="range" id="volume" min="0" max="1" step="0.01">
     </div>
 
   </div>
 
 </div>
 
+<!-- PLAYER -->
+<div class="player-bar">
+
+  <!-- LEFT -->
+  <div class="left">
+    <img id="cover" class="cover">
+    <span id="songTitle">Chưa phát</span>
+  </div>
+
+  <!-- CENTER -->
+  <div class="center">
+
+    <div class="controls">
+      <button id="shuffleBtn"><i class="fa-solid fa-shuffle"></i></button>
+      <button id="prevBtn">⏮</button>
+      <button id="playBtn">▶</button>
+      <button id="nextBtn">⏭</button>
+      <button id="repeatBtn">
+        <i class="fa-solid fa-repeat"></i>
+        <span class="repeat-one">1</span>
+      </button>
+    </div>
+
+    <div class="progress">
+      <span id="currentTime">0:00</span>
+      <input type="range" id="progressBar" min="0" max="100" value="0">
+      <span id="duration">0:00</span>
+    </div>
+
+  </div>
+
+  <!-- RIGHT -->
+  <div class="right">
+    <i class="fa-solid fa-volume-high"></i>
+    <input type="range" id="volume" min="0" max="1" step="0.01">
+  </div>
+
+</div>
+
 <audio id="audio"></audio>
+
 <script src="app.js"></script>
 </body>
 </html>

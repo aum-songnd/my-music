@@ -31,12 +31,10 @@ let playedHistory = [];
 window.onload = () => {
   loadMusicList();
 
-  // volume
   const savedVolume = localStorage.getItem("volume");
   volume.value = savedVolume ?? 0.7;
   audio.volume = volume.value;
 
-  // song index
   currentIndex = Number(localStorage.getItem("currentIndex")) || 0;
 
   updateRepeatUI();
@@ -57,9 +55,12 @@ function loadSong(index, resetTime = true) {
   const song = playlist[index];
   if (!song) return;
 
+  const imgSrc = song.image || "img/meme.webp";
+
   audio.src = song.file;
   songTitle.textContent = song.name;
-  cover.src = song.image;
+  cover.src = imgSrc;
+  vinyl.style.backgroundImage = `url('${imgSrc}')`;
 
   currentIndex = index;
   localStorage.setItem("currentIndex", index);
@@ -69,8 +70,6 @@ function loadSong(index, resetTime = true) {
 
   audio.onloadedmetadata = () => {
     durationEl.textContent = formatTime(audio.duration);
-
-    // chỉ reset khi chuyển bài
     if (resetTime) {
       audio.currentTime = 0;
     }
@@ -112,8 +111,7 @@ function prevSong() {
   if (isShuffle && playedHistory.length > 0) {
     currentIndex = playedHistory.pop();
   } else {
-    currentIndex =
-      (currentIndex - 1 + playlist.length) % playlist.length;
+    currentIndex = (currentIndex - 1 + playlist.length) % playlist.length;
   }
 
   loadSong(currentIndex, true);
@@ -170,12 +168,10 @@ function updateRepeatUI() {
   if (repeatMode === 0) {
     repeatBtn.style.color = "white";
     repeatOneEl.style.display = "none";
-  } 
-  else if (repeatMode === 1) {
+  } else if (repeatMode === 1) {
     repeatBtn.style.color = "#1db954";
     repeatOneEl.style.display = "none";
-  } 
-  else {
+  } else {
     repeatBtn.style.color = "#1db954";
     repeatOneEl.style.display = "block";
   }
@@ -197,28 +193,28 @@ audio.onplay = () => {
   isPlaying = true;
   playBtn.textContent = "⏸";
   vinyl.classList.add("playing");
+  cover.classList.add("playing");
 };
 
 audio.onpause = () => {
   isPlaying = false;
   playBtn.textContent = "▶";
   vinyl.classList.remove("playing");
+  cover.classList.remove("playing");
 };
 
-// ===== 🔥 FIX LOGIC REPEAT =====
+// ===== REPEAT LOGIC =====
 audio.onended = () => {
   if (repeatMode === 2) {
     audio.currentTime = 0;
     audio.play();
-  } 
-  else if (repeatMode === 1) {
+  } else if (repeatMode === 1) {
     nextSong();
-  } 
-  else {
-    // mode 0 → dừng hẳn
+  } else {
     isPlaying = false;
     playBtn.textContent = "▶";
     vinyl.classList.remove("playing");
+    cover.classList.remove("playing");
   }
 };
 
