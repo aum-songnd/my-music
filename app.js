@@ -56,12 +56,67 @@ window.onload = () => {
 };
 
 // ===== LOAD PLAYLIST =====
+const API_KEY = "sb_publishable_pJJGRJ_JOQH4d7LCCrK_Tg_Ze68ZYN0";
+
+
+
 async function loadMusicList() {
-  const res = await fetch("music/playlist.json");
-  playlist = await res.json();
-  loadSong(currentIndex);
-  renderPlaylist();
+  try {
+    const prefix = "a1"; // 👈 folder của bạn
+
+    const res = await fetch(
+      "https://byxkiqvhhzckguxltrta.supabase.co/storage/v1/object/list/music",
+      {
+        method: "POST",
+        headers: {
+          "apikey": API_KEY,
+          "Authorization": `Bearer ${API_KEY}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          prefix: prefix,
+          limit: 100
+        })
+      }
+    );
+
+    const data = await res.json();
+    console.log("DATA:", data);
+
+    // ❌ nếu API lỗi
+    if (!Array.isArray(data)) {
+      console.error("API lỗi:", data);
+      return;
+    }
+
+    // ❌ nếu không có file
+    if (data.length === 0) {
+      console.warn("Không có file trong folder:", prefix);
+      return;
+    }
+
+    // ✅ build playlist đúng URL
+    playlist = data
+  .filter(file => file.name.endsWith(".mp3")) // ✅ chỉ lấy mp3
+  .map(file => {
+    const url = `https://byxkiqvhhzckguxltrta.supabase.co/storage/v1/object/public/music/a1/${encodeURIComponent(file.name)}`;
+
+    return {
+      name: file.name.replace(".mp3", ""),
+      file: url
+    };
+  });
+
+    // ✅ load bài đầu tiên
+    currentIndex = 0;
+    loadSong(currentIndex);
+    renderPlaylist();
+
+  } catch (err) {
+    console.error("Lỗi loadMusicList:", err);
+  }
 }
+
 
 // ===== LOAD SONG =====
 function loadSong(index, resetTime = true) {
