@@ -9,6 +9,10 @@
   --text: #f0f0f5;
   --muted: #7a7a90;
   --bar-h: 80px;
+
+  /* Progress fill: will be updated by JS */
+  --progress-pct: 0%;
+  --volume-pct: 70%;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -107,12 +111,7 @@ body {
   to   { transform: rotate(360deg); }
 }
 
-/* ===== PLAYER BAR — DESKTOP ===== */
-/*
-  Desktop: player-bar là flex-row
-  player-top chiếm full width, flex-row: left | center | right
-  progress ẩn đi — progress nằm trong center trên desktop
-*/
+/* ===== PLAYER BAR ===== */
 .player-bar {
   position: fixed;
   bottom: 0;
@@ -130,7 +129,6 @@ body {
   z-index: 100;
 }
 
-/* player-top: hàng chứa left + center + right */
 .player-top {
   display: flex;
   align-items: center;
@@ -140,7 +138,6 @@ body {
   gap: 8px;
 }
 
-/* Progress nằm riêng — ẩn trên desktop, hiện mobile */
 .progress-row {
   display: none;
 }
@@ -183,7 +180,6 @@ body {
   min-width: 0;
 }
 
-/* Progress nằm trong center trên desktop */
 .progress {
   display: flex;
   align-items: center;
@@ -226,7 +222,7 @@ body {
   height: 44px;
   font-size: 18px;
   background: var(--accent);
-  color: #000;
+  color: #fff;
   border-radius: 50%;
   transition: background 0.2s, transform 0.15s;
 }
@@ -245,13 +241,13 @@ body {
   display: flex; align-items: center; justify-content: center;
 }
 
+/* ===== RANGE BASE ===== */
 input[type="range"] {
   -webkit-appearance: none;
   appearance: none;
   flex: 1;
-  height: 3px;
-  border-radius: 3px;
-  background: var(--surface2);
+  height: 4px;
+  border-radius: 4px;
   outline: none;
   cursor: pointer;
 }
@@ -265,9 +261,41 @@ input[type="range"]::-webkit-slider-thumb {
 }
 input[type="range"]:hover::-webkit-slider-thumb { transform: scale(1.3); }
 
+/* ===== COLORED PROGRESS TRACK ===== */
+#progressBar {
+  background: linear-gradient(
+    to right,
+    var(--accent) 0%,
+    var(--accent) var(--progress-pct),
+    var(--surface2) var(--progress-pct),
+    var(--surface2) 100%
+  );
+}
+
+#progressBar2 {
+  background: linear-gradient(
+    to right,
+    var(--accent) 0%,
+    var(--accent) var(--progress-pct),
+    var(--surface2) var(--progress-pct),
+    var(--surface2) 100%
+  );
+}
+
+/* ===== COLORED VOLUME TRACK ===== */
+#volume {
+  background: linear-gradient(
+    to right,
+    #1db954 0%,
+    #1db954 var(--volume-pct),
+    var(--surface2) var(--volume-pct),
+    var(--surface2) 100%
+  );
+}
+
 /* ===== RIGHT ===== */
 .right {
-  width: 18%;
+  width: 20%;
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -275,6 +303,15 @@ input[type="range"]:hover::-webkit-slider-thumb { transform: scale(1.3); }
 }
 .right i { font-size: 14px; color: var(--muted); flex-shrink: 0; }
 .right input[type="range"] { width: 80px; flex: none; }
+
+/* Volume label */
+#volLabel {
+  font-size: 11px;
+  color: var(--muted);
+  min-width: 30px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
 
 button { cursor: pointer; }
 
@@ -322,7 +359,6 @@ button { cursor: pointer; }
   .vinyl { width: 150px; height: 150px; }
   .vinyl-title { display: block; }
 
-  /* Player bar: 2 hang, can giua */
   .player-bar {
     flex-direction: column;
     height: var(--bar-h);
@@ -332,7 +368,6 @@ button { cursor: pointer; }
     align-items: center;
   }
 
-  /* Hang 1: cover flex-start, controls center */
   .player-top {
     display: flex;
     flex-direction: row;
@@ -352,7 +387,6 @@ button { cursor: pointer; }
 
   .cover { width: 42px; height: 42px; }
 
-  /* controls: flex-1 de can giua trong phan con lai */
   .center {
     flex: 1;
     flex-direction: row;
@@ -363,7 +397,6 @@ button { cursor: pointer; }
 
   .center .progress { display: none; }
 
-  /* Hang 2: progress full width */
   .progress-row {
     display: flex;
     align-items: center;
@@ -383,12 +416,15 @@ button { cursor: pointer; }
   #playBtn { width: 38px; height: 38px; font-size: 15px; }
 
   .right {
-  width: 0%;
-  flex-shrink: 0;
-  gap: 6px;
-}
-.right input[type="range"] { width: 40px; }
-.right i { font-size: 13px; }
+    width: 6%;
+    flex-shrink: 0;
+    gap: 5px;
+  }
+  .right input[type="range"] { width: 52px; }
+  .right i { font-size: 13px; }
+  #volLabel {
+   display: none;
+  }
 }
 
 @media (max-width: 380px) {

@@ -21,8 +21,12 @@ const currentTimeEl2 = document.getElementById("currentTime2");
 const durationEl2 = document.getElementById("duration2");
 
 const volume = document.getElementById("volume");
+const volLabel = document.getElementById("volLabel");
+const volIcon = document.getElementById("volIcon");
 const cover = document.getElementById("cover");
 const vinyl = document.getElementById("vinyl");
+
+const root = document.documentElement;
 
 // ===== STATE =====
 let playlist = [];
@@ -40,6 +44,7 @@ window.onload = () => {
   const savedVolume = localStorage.getItem("volume");
   volume.value = savedVolume ?? 0.7;
   audio.volume = volume.value;
+  updateVolUI(volume.value);
 
   currentIndex = Number(localStorage.getItem("currentIndex")) || 0;
 
@@ -75,6 +80,7 @@ function loadSong(index, resetTime = true) {
   progressBar2.value = 0;
   currentTimeEl.textContent = "0:00";
   currentTimeEl2.textContent = "0:00";
+  setProgressPct(0);
 
   audio.onloadedmetadata = () => {
     durationEl.textContent = formatTime(audio.duration);
@@ -83,6 +89,26 @@ function loadSong(index, resetTime = true) {
   };
 
   updateActiveSong();
+}
+
+// ===== CSS VAR HELPERS =====
+function setProgressPct(pct) {
+  root.style.setProperty("--progress-pct", pct.toFixed(2) + "%");
+}
+
+function updateVolUI(val) {
+  const pct = Math.round(val * 100);
+  root.style.setProperty("--volume-pct", pct + "%");
+  volLabel.textContent = pct + "%";
+
+  // Update icon based on level
+  if (pct === 0) {
+    volIcon.className = "fa-solid fa-volume-xmark";
+  } else if (pct < 40) {
+    volIcon.className = "fa-solid fa-volume-low";
+  } else {
+    volIcon.className = "fa-solid fa-volume-high";
+  }
 }
 
 // ===== PLAY / PAUSE =====
@@ -163,7 +189,11 @@ function updateRepeatUI() {
 }
 
 // ===== SHUFFLE =====
-shuffleBtn.onclick = () => { isShuffle = !isShuffle; localStorage.setItem("shuffle", isShuffle); updateShuffleUI(); };
+shuffleBtn.onclick = () => {
+  isShuffle = !isShuffle;
+  localStorage.setItem("shuffle", isShuffle);
+  updateShuffleUI();
+};
 function updateShuffleUI() { shuffleBtn.style.color = isShuffle ? "#1db954" : "white"; }
 
 // ===== AUDIO EVENTS =====
@@ -202,13 +232,29 @@ audio.ontimeupdate = () => {
   progressBar2.value = pct;
   currentTimeEl.textContent = timeStr;
   currentTimeEl2.textContent = timeStr;
+  setProgressPct(pct);
 
   localStorage.setItem("time_" + currentIndex, audio.currentTime);
 };
 
-// ===== SEEK (cả 2 bar) =====
-progressBar.oninput = () => { audio.currentTime = (progressBar.value / 100) * audio.duration; };
-progressBar2.oninput = () => { audio.currentTime = (progressBar2.value / 100) * audio.duration; };
+// ===== SEEK =====
+progressBar.oninput = () => {
+  const pct = Number(progressBar.value);
+  audio.currentTime = (pct / 100) * audio.duration;
+  setProgressPct(pct);
+  progressBar2.value = pct;
+};
+progressBar2.oninput = () => {
+  const pct = Number(progressBar2.value);
+  audio.currentTime = (pct / 100) * audio.duration;
+  setProgressPct(pct);
+  progressBar.value = pct;
+};
 
 // ===== VOLUME =====
-volume.oninput = (e) => { audio.volume = e.target.value; localStorage.setItem("volume", e.target.value); };
+volume.oninput = (e) => {
+  const val = Number(e.target.value);
+  audio.volume = val;
+  localStorage.setItem("volume", val);
+  updateVolUI(val);
+};
