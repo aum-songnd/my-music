@@ -4,9 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>River Music</title>
+
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
+
 <body>
 
 <div class="app">
@@ -14,7 +16,9 @@
   <!-- SIDEBAR (desktop) -->
   <div class="sidebar">
     <h2>🎧 River Music</h2>
-    <div id="playlistContainer"></div>
+
+    <!-- FOLDER LIST -->
+    <div id="playlistContainer" class="playlist"></div>
   </div>
 
   <!-- MAIN / NOW PLAYING -->
@@ -26,22 +30,35 @@
   </div>
 
   <!-- MOBILE PLAYLIST PANEL -->
-  <div class="mobile-playlist" id="tabPlaylist">
-    <div id="mobilePlaylistContainer"></div>
+  <div class="mobile-playlist hidden" id="tabPlaylist">
+    <div class="mobile-header">
+      <h3>Playlist</h3>
+    </div>
+
+    <div id="mobilePlaylistContainer" class="playlist"></div>
   </div>
 
 </div>
 
 <!-- MOBILE TAB BAR -->
 <div class="tab-bar">
-  <button class="tab-btn active" id="tabBtnNowPlaying" onclick="switchTab('nowplaying')">
+
+  <button class="tab-btn active"
+    id="tabBtnNowPlaying"
+    onclick="switchTab('nowplaying')">
+
     <i class="fa-solid fa-headphones"></i>
-    <span>River Music</span>
+    <span>Now Playing</span>
   </button>
-  <button class="tab-btn" id="tabBtnPlaylist" onclick="switchTab('playlist')">
+
+  <button class="tab-btn"
+    id="tabBtnPlaylist"
+    onclick="switchTab('playlist')">
+
     <i class="fa-solid fa-list"></i>
     <span>Playlist</span>
   </button>
+
 </div>
 
 <!-- PLAYER BAR -->
@@ -49,58 +66,86 @@
 
   <div class="player-top">
 
+    <!-- LEFT -->
     <div class="left">
       <img id="cover" class="cover" src="img/meme.webp" alt="cover">
       <span id="songTitle">Chưa phát</span>
     </div>
 
+    <!-- CENTER -->
     <div class="center">
+
       <div class="controls">
         <button id="shuffleBtn"><i class="fa-solid fa-shuffle"></i></button>
-          <button id="prevBtn"><i class="fa-solid fa-backward-fast"></i></button>
-        <button id="playBtn"><i class="fa-solid fa-play"></i></button>
-        <button id="nextBtn"><i class="fa-solid fa-forward-fast"></i></button>
+
+        <button id="prevBtn">
+          <i class="fa-solid fa-backward-fast"></i>
+        </button>
+
+        <button id="playBtn">
+          <i class="fa-solid fa-play"></i>
+        </button>
+
+        <button id="nextBtn">
+          <i class="fa-solid fa-forward-fast"></i>
+        </button>
+
         <button id="repeatBtn">
           <i class="fa-solid fa-repeat"></i>
           <span class="repeat-one">1</span>
         </button>
       </div>
 
-      <!-- Desktop progress -->
+      <!-- PROGRESS DESKTOP -->
       <div class="progress">
         <span id="currentTime">0:00</span>
+
         <div class="progress-wrap">
           <div class="progress-fill" id="progressFill"></div>
-          <input type="range" id="progressBar" min="0" max="100" value="0" step="0.1">
+          <input type="range" id="progressBar"
+            min="0" max="100" value="0" step="0.1">
         </div>
+
         <span id="duration">0:00</span>
       </div>
+
     </div>
 
+    <!-- RIGHT -->
     <div class="right">
       <i class="fa-solid fa-volume-high" id="volIcon"></i>
+
       <div class="progress-wrap vol-wrap">
         <div class="progress-fill" id="volFill"></div>
-        <input type="range" id="volume" min="0" max="1" step="0.01">
+        <input type="range" id="volume"
+          min="0" max="1" step="0.01">
       </div>
+
       <span id="volLabel">70%</span>
     </div>
 
   </div>
 
-  <!-- Mobile progress -->
+  <!-- MOBILE PROGRESS -->
   <div class="progress-row">
     <span id="currentTime2">0:00</span>
+
     <div class="progress-wrap">
       <div class="progress-fill" id="progressFill2"></div>
-      <input type="range" id="progressBar2" min="0" max="100" value="0" step="0.1">
+      <input type="range" id="progressBar2"
+        min="0" max="100" value="0" step="0.1">
     </div>
+
     <span id="duration2">0:00</span>
   </div>
 
 </div>
 
+<!-- AUDIO -->
 <audio id="audio"></audio>
+
+<!-- JS -->
 <script src="app.js"></script>
+
 </body>
 </html>

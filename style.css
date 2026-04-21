@@ -82,7 +82,7 @@ body {
   width: 220px;
   height: 220px;
   border-radius: 50%;
-  background: url('https://i.imgur.com/8Km9tLL.png') center/cover;
+  background: url('img/meme.webp') center/cover;
   animation: spin 5s linear infinite;
   animation-play-state: paused;
   box-shadow: 0 0 0 6px #1a1a24, 0 0 0 8px rgba(29,185,84,0.15), 0 20px 60px rgba(0,0,0,0.6);
@@ -395,7 +395,7 @@ button { cursor: pointer; }
   .player-bar {
     flex-direction: column;
     height: var(--bar-h);
-    padding: 8px 14px 10px;
+    padding: 8px 14px 12px;
     gap: 6px;
     justify-content: center;
     align-items: center;
@@ -468,7 +468,18 @@ button { cursor: pointer; }
 }
 
 .mobile-playlist {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  padding: 16px 12px;
+  flex-direction: column;
+  gap: 4px;
+  background: var(--bg);
   display: none;
+}
+
+.mobile-playlist.active {
+  display: flex;
 }
 
 @media (max-width: 600px) {
@@ -552,4 +563,21 @@ button { cursor: pointer; }
     overflow: hidden;
     text-overflow: ellipsis;
   }
+}
+.hidden {
+  display: none !important;
+}
+
+.playlist {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+#playBtn.playing {
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(29,185,84,0.5);
+}
+
+.repeat-one {
+  display: none; /* mặc định ẩn */
 }
